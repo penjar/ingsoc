@@ -6,15 +6,14 @@ const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fet
 // Funcion para generar respuesta usando la API de Google
 async function generateAIResponse(topic) {
   try {
-    const apiKey = process.env.API_KEY; // Leer la clave de la API desde una variable de entorno
-    const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent';
+    const apiKey = (process.env.API_KEY || '').trim(); // Leer la clave de la API desde una variable de entorno
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
     const prompt = `Explica de forma breve, clara y educativa el uso de la inteligencia artificial en ${topic}, dentro del contexto de las TIC.`;
     const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-goog-api-key': apiKey,
       },
       body: JSON.stringify({
         contents: [
