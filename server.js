@@ -7,6 +7,13 @@ const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fet
 async function generateAIResponse(topic) {
   try {
     const apiKey = (process.env.API_KEY || '').trim(); // Leer la clave de la API desde una variable de entorno
+
+    // Verificar si la clave de la API está presente
+    if (!apiKey) {
+      console.error("Falta la API Key en el servidor.");
+      throw new Error("Falta la API Key en el servidor");
+    }
+
     const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
     const prompt = `Explica de forma breve, clara y educativa el uso de la inteligencia artificial en ${topic}, dentro del contexto de las TIC.`;
