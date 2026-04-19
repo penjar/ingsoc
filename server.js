@@ -15,8 +15,8 @@ async function generateAIResponse(topic) {
       throw new Error("La variable API_KEY no está configurada en el servidor.");
     }
 
-    // Seleccionamos el modelo (1.5-flash es ideal para respuestas rápidas y educativas)
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    // Seleccion del modelo
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" }); 
 
     const prompt = `Explica de forma breve, clara y educativa el uso de la inteligencia artificial en ${topic}, dentro del contexto de las TIC.`;
 
