@@ -14,7 +14,7 @@ async function generateAIResponse(topic) {
       throw new Error("Falta la API Key en el servidor");
     }
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
     const prompt = `Explica de forma breve, clara y educativa el uso de la inteligencia artificial en ${topic}, dentro del contexto de las TIC.`;
     const response = await fetch(url, {
@@ -125,7 +125,7 @@ const server = http.createServer(async (req, res) => {
 // Iniciar el servidor
 const PORT =  process.env.PORT || 3000;
 server.listen(PORT, () => {
-  console.log(`Servidor ejecutándose.`);
+  console.log("Servidor ejecutándose en puerto", PORT);
 });
 
 // Nota: La clave de API se gestiona de forma local mediante google-credentials.json para evitar su exposición en el cliente.
