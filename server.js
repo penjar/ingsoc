@@ -1,7 +1,7 @@
 const http = require('http');
 const fs = require('fs'); // Importar modulo para manejar archivos
 const path = require('path');
-const credentials = require('./google-credentials.json'); // Importar las credenciales de la API
+const apiKey = process.env.API_KEY; // Leer la clave de la API desde una variable de entorno
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args)); // Importar node-fetch v3
 
 // Funcion para generar respuesta usando la API de Google
@@ -117,8 +117,8 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-// Iniciar el servidor en el puerto 3000
-const PORT = 3000;
+// Iniciar el servidor
+const PORT =  process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`Servidor ejecutándose en http://localhost:${PORT}`);
 });
