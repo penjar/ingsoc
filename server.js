@@ -1,13 +1,12 @@
 const http = require('http');
 const fs = require('fs'); // Importar modulo para manejar archivos
 const path = require('path');
-const apiKey = process.env.API_KEY; // Leer la clave de la API desde una variable de entorno
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args)); // Importar node-fetch v3
 
 // Funcion para generar respuesta usando la API de Google
 async function generateAIResponse(topic) {
   try {
-    const apiKey = credentials.apiKey; // Leer la clave de la API desde google-credentials.json
+    const apiKey = process.env.API_KEY; // Leer la clave de la API desde una variable de entorno
     const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent';
 
     const prompt = `Explica de forma breve, clara y educativa el uso de la inteligencia artificial en ${topic}, dentro del contexto de las TIC.`;
