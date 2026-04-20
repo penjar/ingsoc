@@ -38,7 +38,22 @@ module.exports = async (req, res) => {
     );
     const prompt = `Genera una explicación educativa sobre el concepto: "${topic}".\nEstructura tu respuesta en 3 partes breves:\n1. **¿Qué es?** (Definición simple con analogía).\n2. **¿Para qué sirve?** (Ejemplo práctico).\n3. **Impacto:** (Por qué es importante).`;
 
-    const result = await model.generateContentStream(prompt);
+    let result;
+    let retries = 3;
+    while (retries > 0) {
+      try {
+        result = await model.generateContentStream(prompt);
+        break; 
+      } catch (error) {
+        if (error.message.includes('503') && retries > 1) {
+          console.warn(`Error 503 de Google. Reintentando... (Intentos restantes: ${retries - 1})`);
+          await new Promise(resolve => setTimeout(resolve, 2000));
+          retries--;
+        } else {
+          throw error;
+        }
+      }
+    }
 
     res.setHeader('Content-Type', 'text/plain; charset=utf-8');
     res.setHeader('Transfer-Encoding', 'chunked');
