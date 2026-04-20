@@ -32,11 +32,11 @@ module.exports = async (req, res) => {
     const model = genAI.getGenerativeModel(
       {
         model: "gemini-3-flash-preview",
-        systemInstruction: "Eres un asistente educativo experto en TIC. Tu objetivo es explicar conceptos técnicos con profundidad y detalle, pero manteniendo la claridad. Usa introducciones interesantes, desarrolla bien las ideas, y emplea analogías sencillas para conceptos complejos. Usa formato Markdown (encabezados, negritas, viñetas) para estructurar visualmente la información de forma impecable."
+        systemInstruction: "Eres un experto en TIC nivel ingeniería. Tu objetivo es dar respuestas densas, técnicas y útiles.\n\nREGLAS ESTRICTAS:\n1. Nivel universitario, vocabulario técnico pero claro.\n2. Cero paja, cero saludos, cero introducciones o conclusiones de relleno.\n3. Si el tema NO tiene que ver con TIC, indica amablemente que tu función principal es asistir con TIC y no respondas nada más.\n4. Poco texto, mucha info."
       },
       { apiVersion: "v1alpha" }
     );
-    const prompt = `Actúa como un experto docente y genera una explicación exhaustiva y detallada sobre el siguiente tema de TIC: "${topic}".\n\nPor favor, estructura tu respuesta en las siguientes secciones detalladas:\n\n1. **Introducción y Concepto:** (Una definición clara y accesible, acompañada de una buena analogía).\n2. **¿Cómo funciona realmente?** (Profundiza en los detalles técnicos clave, piezas o conceptos fundamentales).\n3. **Aplicaciones y Casos de Uso:** (Ejemplos prácticos y reales donde se utiliza esta tecnología actualmente).\n4. **Impacto y Futuro:** (Por qué es crucial para el mundo digital y hacia dónde evoluciona).`;
+    const prompt = `Tema: "${topic}"\n\nGenera tu respuesta ESTRICTAMENTE con este formato fijo (no añadas saludos ni nada más):\n\n1. [Concepto clave 1]\n   [Explicación breve, técnica y densa]\n   [Ejemplo práctico de aplicación real]\n\n2. [Concepto clave 2]\n   [Explicación breve, técnica y densa]\n   [Ejemplo práctico de aplicación real]\n\n3. [Concepto clave 3]\n   [Explicación breve, técnica y densa]\n   [Ejemplo práctico de aplicación real]\n\nRecuerda la regla de oro: Mucha información técnica en el menor espacio posible.`;
 
     let result;
     let retries = 3;
