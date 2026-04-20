@@ -169,29 +169,47 @@
 
     // Evento al hacer clic en el botón "Generar"
     generateButton.addEventListener('click', async () => {
-      const topic = topicInput.value.trim();
+  const topic = topicInput.value.trim();
 
-      // Validar entrada
-      if (!topic) {
-        resultArea.textContent = 'Por favor, introduce un tema válido.';
-        return;
-      }
+  if (!topic) {
+    resultArea.innerHTML = '<span style="color: #ff4d4d;">Por favor, introduce un tema.</span>';
+    return;
+  }
 
-      // Mostrar mensaje de "Generando..."
-      resultArea.innerHTML = '<span class="loading">Generando...</span>';
+  // Limpiar y mostrar carga
+  resultArea.innerHTML = '<span class="loading">Generando explicación...</span>';
 
-      try {
-        // Llamar a la función que simula la API
-        const response = await fetchAIResponse(topic);
-        console.log('Respuesta de la API:', response); // Log para depuración
-
-        // Usar Marked.js para convertir el texto Markdown a HTML
-        resultArea.innerHTML = marked.parse(response);
-      } catch (error) {
-        resultArea.textContent = error.message || 'Ocurrió un error al generar la respuesta.';
-        console.error(error);
-      }
+  try {
+    const response = await fetch('/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ topic }),
     });
+
+    const data = await response.json();
+
+    if (data.error) {
+      // SI HAY ERROR: Lo mostramos directamente en el área de resultado
+      resultArea.innerHTML = `
+        <div style="color: #ff4d4d; border: 1px solid #ff4d4d; padding: 10px; border-radius: 5px; background: rgba(255,0,0,0.1); overflow-wrap: anywhere;">
+          <strong>Se ha encontrado un error:</strong><br>
+          ${data.error}
+          ${data.details ? `<hr style="border-color: #ff4d4d; opacity: 0.5;"><small><pre style="white-space: pre-wrap; font-family: monospace; text-align: left;">${data.details}</pre></small>` : ''}
+        </div>`;
+    } else {
+      // SI TODO ESTÁ BIEN: Mostramos la respuesta con Marked
+      resultArea.innerHTML = marked.parse(data.response);
+    }
+
+  } catch (error) {
+    // Error de conexión (ej: servidor caído)
+    resultArea.innerHTML = `
+      <div style="color: #ff4d4d; border: 1px solid #ff4d4d; padding: 10px; border-radius: 5px; background: rgba(255,0,0,0.1); overflow-wrap: anywhere;">
+        <strong>Error del lado del cliente:</strong><br>
+        ${error.message || error}
+      </div>`;
+  }
+});
 
     // Evento al presionar ENTER
     topicInput.addEventListener("keypress", function(e) {

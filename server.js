@@ -65,12 +65,15 @@ const server = http.createServer(async (req, res) => {
         res.setHeader('Content-Type', 'application/json');
         res.end(JSON.stringify({ response: aiResponse }));
       } catch (error) {
-        console.error('Error al procesar la solicitud:', error.message);
+        console.error('Error al procesar la solicitud:', error);
         res.statusCode = 500;
         res.setHeader('Content-Type', 'application/json');
-       // Enviamos el mensaje real que viene del SDK de Google
-       res.end(JSON.stringify({ error: error.message }));
-}
+        
+        const errorMessage = error.message || String(error);
+        const errorDetails = error.stack || '';
+        
+        res.end(JSON.stringify({ error: errorMessage, details: errorDetails }));
+      }
     });
   } 
   // Ruta principal para servir el HTML
