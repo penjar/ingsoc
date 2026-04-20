@@ -30,20 +30,35 @@ module.exports = async (req, res) => {
 
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel(
-      { model: "gemini-3-flash-preview" },
+      { 
+        model: "gemini-3-flash-preview",
+        systemInstruction: "Eres un experto en Tecnologías de la Información y Comunicación (TIC). Tu objetivo es explicar conceptos técnicos relacionados con la inteligencia artificial a un público general. Sé claro, educativo, usa analogías sencillas y estructura tu respuesta con viñetas o listas cuando sea útil. Mantén un tono profesional pero accesible."
+      },
       { apiVersion: "v1alpha" }
     );
-    const prompt = `Explica de forma breve, clara y educativa el uso de la inteligencia artificial en ${topic}, dentro del contexto de las TIC.`;
+    const prompt = `Explícame de forma detallada el uso y el impacto de la inteligencia artificial en el siguiente tema: ${topic}.`;
 
-    const result = await model.generateContent(prompt);
-    const responseText = result.response.text();
+    const result = await model.generateContentStream(prompt);
 
-    return res.status(200).json({ response: responseText });
+    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+    res.setHeader('Transfer-Encoding', 'chunked');
+
+    for await (const chunk of result.stream) {
+      const chunkText = chunk.text();
+      res.write(chunkText);
+    }
+    
+    res.end();
 
   } catch (error) {
     console.error('Error al procesar la solicitud:', error);
-    const errorMessage = error.message || String(error);
-    const errorDetails = error.stack || '';
-    return res.status(500).json({ error: errorMessage, details: errorDetails });
+    if (res.headersSent) {
+      res.write(`\n\n**Error durante la generación:** ${error.message}`);
+      res.end();
+    } else {
+      const errorMessage = error.message || String(error);
+      const errorDetails = error.stack || '';
+      return res.status(500).json({ error: errorMessage, details: errorDetails });
+    }
   }
 };

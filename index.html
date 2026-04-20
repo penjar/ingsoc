@@ -126,6 +126,24 @@
     .result::-webkit-scrollbar-thumb:hover {
       background: #008bb5;
     }
+
+    /* Spinner de carga */
+    .spinner {
+      border: 4px solid rgba(0, 212, 255, 0.2);
+      border-left-color: #00d4ff;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 10px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
@@ -177,7 +195,7 @@
   }
 
   // Limpiar y mostrar carga
-  resultArea.innerHTML = '<span class="loading">Generando explicación...</span>';
+  resultArea.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%;"><div class="spinner"></div><span class="loading" style="font-weight: bold; font-size: 1.2rem;">Pensando y escribiendo...</span></div>';
 
   try {
     const response = await fetch('/api/generate', {
@@ -186,19 +204,31 @@
       body: JSON.stringify({ topic }),
     });
 
-    const data = await response.json();
-
-    if (data.error) {
-      // SI HAY ERROR: Lo mostramos directamente en el área de resultado
+    if (!response.ok) {
+      const data = await response.json();
       resultArea.innerHTML = `
         <div style="color: #ff4d4d; border: 1px solid #ff4d4d; padding: 10px; border-radius: 5px; background: rgba(255,0,0,0.1); overflow-wrap: anywhere;">
           <strong>Se ha encontrado un error:</strong><br>
           ${data.error}
           ${data.details ? `<hr style="border-color: #ff4d4d; opacity: 0.5;"><small><pre style="white-space: pre-wrap; font-family: monospace; text-align: left;">${data.details}</pre></small>` : ''}
         </div>`;
-    } else {
-      // SI TODO ESTÁ BIEN: Mostramos la respuesta con Marked
-      resultArea.innerHTML = marked.parse(data.response);
+      return;
+    }
+
+    // Preparar para escritura en vivo
+    resultArea.innerHTML = '';
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder('utf-8');
+    let markdownText = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      
+      markdownText += decoder.decode(value, { stream: true });
+      resultArea.innerHTML = marked.parse(markdownText);
+      // Autoscroll hacia abajo
+      resultArea.scrollTop = resultArea.scrollHeight;
     }
 
   } catch (error) {
