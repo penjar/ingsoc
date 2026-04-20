@@ -156,7 +156,7 @@
         });
 
         if (!response.ok) {
-          throw new Error(error.message || 'Error al conectar con la API');
+          throw new Error('Error al conectar con la API');
         }
 
         const data = await response.json();
