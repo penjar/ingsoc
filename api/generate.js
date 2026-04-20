@@ -32,11 +32,11 @@ module.exports = async (req, res) => {
     const model = genAI.getGenerativeModel(
       { 
         model: "gemini-3-flash-preview",
-        systemInstruction: "Eres un experto en Tecnologías de la Información y Comunicación (TIC). Tu objetivo es explicar conceptos técnicos relacionados con la inteligencia artificial a un público general. Sé claro, educativo, usa analogías sencillas y estructura tu respuesta con viñetas o listas cuando sea útil. Mantén un tono profesional pero accesible."
+        systemInstruction: "Eres un experto en TIC. Ve directo al grano, sin saludos, sin introducciones largas y sin conclusiones innecesarias. Da respuestas cortas, concisas y estructuradas en puntos clave."
       },
       { apiVersion: "v1alpha" }
     );
-    const prompt = `Explícame de forma detallada el uso y el impacto de la inteligencia artificial en el siguiente tema: ${topic}.`;
+    const prompt = `Explica en 3 puntos clave y de forma muy directa el uso e impacto de la inteligencia artificial en: ${topic}.`;
 
     const result = await model.generateContentStream(prompt);
 
