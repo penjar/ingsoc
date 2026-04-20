@@ -32,11 +32,17 @@ module.exports = async (req, res) => {
     const model = genAI.getGenerativeModel(
       {
         model: "gemini-3-flash-preview",
-        systemInstruction: "Eres un experto en TIC de nivel ingeniería. Tu objetivo es dar respuestas densas, técnicas y útiles para facilitar el aprendizaje. NUNCA saludes ni des introducciones de relleno. Si el tema no tiene que ver con TIC, recházalo amablemente."
+        systemInstruction: "Eres un experto en TIC de nivel ingeniería. Tu objetivo es dar respuestas densas, técnicas y útiles para facilitar el parendizaje sobre la IA generativa y las TIC.\n\n Debes usar un formato visual usando negrita y viñetas."
       },
       { apiVersion: "v1alpha" }
     );
-    const prompt = `Tema: "${topic}"\n\nDebes responder ESTRICTAMENTE copiando esta plantilla de 3 puntos. Reemplaza el texto entre corchetes con tu información técnica. No añadas nada fuera de esta plantilla:\n\n1. **[Nombre del Concepto 1]**\n   *Explicación:* [Explicación técnica, breve y nivel universitario]\n   *Ejemplo:* [Ejemplo práctico y real]\n\n2. **[Nombre del Concepto 2]**\n   *Explicación:* [Explicación técnica, breve y nivel universitario]\n   *Ejemplo:* [Ejemplo práctico y real]\n\n3. **[Nombre del Concepto 3]**\n   *Explicación:* [Explicación técnica, breve y nivel universitario]\n   *Ejemplo:* [Ejemplo práctico y real]`;
+    const prompt = `Genera una respuesta completa sobre el tema: ${topic}. 
+    Tu respuesta debe abordar los siguientes aspectos:
+    1. Introducción al tema
+    2. Conceptos clave
+    3. Aplicaciones reales
+    4. Importancia en el contexto actual
+    5. Futuro del tema  `;
 
     let result;
     let retries = 3;
