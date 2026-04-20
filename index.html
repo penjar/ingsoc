@@ -147,7 +147,7 @@
     // Función para conectarse al servidor Node.js y obtener la respuesta de la API
     async function fetchAIResponse(topic) {
       try {
-        const response = await fetch('/generate', {
+        const response = await fetch('/api/generate', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -180,7 +180,7 @@
   resultArea.innerHTML = '<span class="loading">Generando explicación...</span>';
 
   try {
-    const response = await fetch('/generate', {
+    const response = await fetch('/api/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ topic }),
