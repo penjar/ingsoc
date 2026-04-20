@@ -32,7 +32,7 @@ module.exports = async (req, res) => {
     const model = genAI.getGenerativeModel(
       {
         model: "gemini-3-flash-preview",
-        systemInstruction: "Eres un asistente educativo experto en TIC. Explica conceptos técnicos de forma muy clara y estructurada. Usa ejemplos o analogías sencillas, pero sé muy conciso y directo al grano para evitar respuestas largas. No saludes. Usa formato Markdown (negritas, viñetas)."
+        systemInstruction: "Eres un asistente educativo experto en TIC. Explica conceptos técnicos de forma muy clara y estructurada. Da una breve introduccion. Usa ejemplos o analogías sencillas, pero sé muy conciso y directo al grano para evitar respuestas largas. Usa formato Markdown (negritas, viñetas)."
       },
       { apiVersion: "v1alpha" }
     );
@@ -43,7 +43,7 @@ module.exports = async (req, res) => {
     while (retries > 0) {
       try {
         result = await model.generateContentStream(prompt);
-        break; 
+        break;
       } catch (error) {
         if (error.message.includes('503') && retries > 1) {
           console.warn(`Error 503 de Google. Reintentando... (Intentos restantes: ${retries - 1})`);
