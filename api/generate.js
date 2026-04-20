@@ -32,11 +32,11 @@ module.exports = async (req, res) => {
     const model = genAI.getGenerativeModel(
       {
         model: "gemini-3-flash-preview",
-        systemInstruction: "Eres un asistente educativo experto en TIC. Explica conceptos técnicos de forma muy clara y estructurada. Da una breve introduccion. Usa ejemplos o analogías sencillas, pero sé muy conciso y directo al grano para evitar respuestas largas. Usa formato Markdown (negritas, viñetas)."
+        systemInstruction: "Eres un asistente educativo experto en TIC. Tu objetivo es explicar conceptos técnicos con profundidad y detalle, pero manteniendo la claridad. Usa introducciones interesantes, desarrolla bien las ideas, y emplea analogías sencillas para conceptos complejos. Usa formato Markdown (encabezados, negritas, viñetas) para estructurar visualmente la información de forma impecable."
       },
       { apiVersion: "v1alpha" }
     );
-    const prompt = `Genera una explicación educativa sobre el concepto: "${topic}".\nEstructura tu respuesta en 3 partes breves:\n1. **¿Qué es?** (Definición simple con analogía).\n2. **¿Para qué sirve?** (Ejemplo práctico).\n3. **Impacto:** (Por qué es importante).`;
+    const prompt = `Actúa como un experto docente y genera una explicación exhaustiva y detallada sobre el siguiente tema de TIC: "${topic}".\n\nPor favor, estructura tu respuesta en las siguientes secciones detalladas:\n\n1. **Introducción y Concepto:** (Una definición clara y accesible, acompañada de una buena analogía).\n2. **¿Cómo funciona realmente?** (Profundiza en los detalles técnicos clave, piezas o conceptos fundamentales).\n3. **Aplicaciones y Casos de Uso:** (Ejemplos prácticos y reales donde se utiliza esta tecnología actualmente).\n4. **Impacto y Futuro:** (Por qué es crucial para el mundo digital y hacia dónde evoluciona).`;
 
     let result;
     let retries = 3;
