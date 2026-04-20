@@ -64,10 +64,12 @@ const server = http.createServer(async (req, res) => {
         res.setHeader('Content-Type', 'application/json');
         res.end(JSON.stringify({ response: aiResponse }));
       } catch (error) {
+        console.error('Error al procesar la solicitud:', error.message);
         res.statusCode = 500;
         res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify({ error: error.message }));
-      }
+       // Enviamos el mensaje real que viene del SDK de Google
+       res.end(JSON.stringify({ error: error.message }));
+}
     });
   } 
   // Ruta principal para servir el HTML
