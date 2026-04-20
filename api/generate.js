@@ -30,13 +30,13 @@ module.exports = async (req, res) => {
 
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel(
-      { 
+      {
         model: "gemini-3-flash-preview",
-        systemInstruction: "Eres un experto en TIC. Ve directo al grano, sin saludos, sin introducciones largas y sin conclusiones innecesarias. Da respuestas cortas, concisas y estructuradas en puntos clave."
+        systemInstruction: "Eres un asistente educativo experto en TIC. Explica conceptos técnicos de forma muy clara y estructurada. Usa ejemplos o analogías sencillas, pero sé muy conciso y directo al grano para evitar respuestas largas. No saludes. Usa formato Markdown (negritas, viñetas)."
       },
       { apiVersion: "v1alpha" }
     );
-    const prompt = `Explica en 3 puntos clave y de forma muy directa el uso e impacto de la inteligencia artificial en: ${topic}.`;
+    const prompt = `Genera una explicación educativa sobre el concepto: "${topic}".\nEstructura tu respuesta en 3 partes breves:\n1. **¿Qué es?** (Definición simple con analogía).\n2. **¿Para qué sirve?** (Ejemplo práctico).\n3. **Impacto:** (Por qué es importante).`;
 
     const result = await model.generateContentStream(prompt);
 
@@ -47,7 +47,7 @@ module.exports = async (req, res) => {
       const chunkText = chunk.text();
       res.write(chunkText);
     }
-    
+
     res.end();
 
   } catch (error) {
