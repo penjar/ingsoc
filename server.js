@@ -28,7 +28,7 @@ async function generateAIResponse(topic) {
     return text;
   } catch (error) {
     console.error('Error con el SDK de Google:', error.message);
-    throw new Error('No se pudo generar la respuesta con la IA.');
+    throw new Error(error.message || 'Error al generar la respuesta con la IA');
   }
 }
 

@@ -163,7 +163,7 @@
         return data.response;
       } catch (error) {
         console.error('Error al conectar con la API:', error);
-        throw new Error('No se pudo conectar con el servidor.');
+        throw new Error(error.message || 'Error al conectar con la API');
       }
     }
 
@@ -188,7 +188,7 @@
         // Usar Marked.js para convertir el texto Markdown a HTML
         resultArea.innerHTML = marked.parse(response);
       } catch (error) {
-        resultArea.textContent = 'Ocurrió un error al generar el texto. Inténtalo de nuevo.';
+        resultArea.textContent = error.message || 'Ocurrió un error al generar la respuesta.';
         console.error(error);
       }
     });
