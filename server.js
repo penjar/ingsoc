@@ -6,29 +6,30 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 // Configuración de la IA
 // El SDK buscará la clave en la variable de entorno API_KEY
-const genAI = new GoogleGenerativeAI(process.env.API_KEY || "");
+const genAI = new GoogleGenerativeAI(process.env.API_KEY);
 
 async function generateAIResponse(topic) {
   try {
-    // Validar que la clave existe antes de intentar la llamada
-    if (!process.env.API_KEY) {
-      throw new Error("La variable API_KEY no está configurada en el servidor.");
+    // 1. Limpiamos y capturamos la clave directamente
+    const rawKey = process.env.API_KEY || "";
+    const apiKey = rawKey.trim();
+
+    if (!apiKey) {
+      throw new Error("La variable API_KEY no está configurada o está vacía.");
     }
 
-    // Seleccion del modelo
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" }); 
+    // 2. Inicializamos el SDK dentro de la función con la clave específica
+    const genAI = new GoogleGenerativeAI(apiKey);
 
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" }); 
     const prompt = `Explica de forma breve, clara y educativa el uso de la inteligencia artificial en ${topic}, dentro del contexto de las TIC.`;
 
-    // Generar contenido
     const result = await model.generateContent(prompt);
     const response = await result.response;
-    const text = response.text();
-
-    return text;
+    return response.text();
+    
   } catch (error) {
-    console.error('Error con el SDK de Google:', error.message);
-    throw new Error(error.message || 'Error al generar la respuesta con la IA');
+    throw error; 
   }
 }
 
