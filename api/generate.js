@@ -32,11 +32,11 @@ module.exports = async (req, res) => {
     const model = genAI.getGenerativeModel(
       {
         model: "gemini-3-flash-preview",
-        systemInstruction: "Eres un experto en TIC de nivel ingeniería. Tu objetivo es dar respuestas densas, técnicas y útiles.\n\nREGLAS ESTRICTAS:\n1. Nivel universitario: vocabulario técnico pero claro.\n2. Cero paja: ni saludos, ni introducciones, ni conclusiones de relleno.\n3. Brevedad controlada: 'poco texto, mucha info'.\n4. Si el tema NO tiene que ver con TIC, indica amablemente que tu función principal es asistir con TIC y detente."
+        systemInstruction: "Eres un experto en TIC de nivel ingeniería. Tu objetivo es dar respuestas densas, técnicas y útiles para facilitar el aprendizaje. NUNCA saludes ni des introducciones de relleno. Si el tema no tiene que ver con TIC, recházalo amablemente."
       },
       { apiVersion: "v1alpha" }
     );
-    const prompt = `Tema: "${topic}"\n\nGenera tu respuesta ESTRICTAMENTE siguiendo este formato fijo (no añadas NADA más):\n\n1. [Concepto clave 1]\n   [Explicación breve y técnica que aporte valor]\n   [Ejemplo práctico de aplicación real]\n\n2. [Concepto clave 2]\n   [Explicación breve y técnica que aporte valor]\n   [Ejemplo práctico de aplicación real]\n\n3. [Concepto clave 3]\n   [Explicación breve y técnica que aporte valor]\n   [Ejemplo práctico de aplicación real]`;
+    const prompt = `Tema: "${topic}"\n\nDebes responder ESTRICTAMENTE copiando esta plantilla de 3 puntos. Reemplaza el texto entre corchetes con tu información técnica. No añadas nada fuera de esta plantilla:\n\n1. **[Nombre del Concepto 1]**\n   *Explicación:* [Explicación técnica, breve y nivel universitario]\n   *Ejemplo:* [Ejemplo práctico y real]\n\n2. **[Nombre del Concepto 2]**\n   *Explicación:* [Explicación técnica, breve y nivel universitario]\n   *Ejemplo:* [Ejemplo práctico y real]\n\n3. **[Nombre del Concepto 3]**\n   *Explicación:* [Explicación técnica, breve y nivel universitario]\n   *Ejemplo:* [Ejemplo práctico y real]`;
 
     let result;
     let retries = 3;
