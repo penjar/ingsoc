@@ -32,11 +32,11 @@ module.exports = async (req, res) => {
     const model = genAI.getGenerativeModel(
       {
         model: "gemini-3-flash-preview",
-        systemInstruction: "Eres un experto en TIC nivel ingeniería. Tu objetivo es dar respuestas densas, técnicas y útiles.\n\nREGLAS ESTRICTAS:\n1. Nivel universitario, vocabulario técnico pero claro.\n2. Cero paja, cero saludos, cero introducciones o conclusiones de relleno.\n3. Si el tema NO tiene que ver con TIC, indica amablemente que tu función principal es asistir con TIC y no respondas nada más.\n4. Poco texto, mucha info."
+        systemInstruction: "Eres un experto en TIC de nivel ingeniería. Tu objetivo es dar respuestas densas, técnicas y útiles.\n\nREGLAS ESTRICTAS:\n1. Nivel universitario: vocabulario técnico pero claro.\n2. Cero paja: ni saludos, ni introducciones, ni conclusiones de relleno.\n3. Brevedad controlada: 'poco texto, mucha info'.\n4. Si el tema NO tiene que ver con TIC, indica amablemente que tu función principal es asistir con TIC y detente."
       },
       { apiVersion: "v1alpha" }
     );
-    const prompt = `Tema: "${topic}"\n\nGenera tu respuesta ESTRICTAMENTE con este formato fijo (no añadas saludos ni nada más):\n\n1. [Concepto clave 1]\n   [Explicación breve, técnica y densa]\n   [Ejemplo práctico de aplicación real]\n\n2. [Concepto clave 2]\n   [Explicación breve, técnica y densa]\n   [Ejemplo práctico de aplicación real]\n\n3. [Concepto clave 3]\n   [Explicación breve, técnica y densa]\n   [Ejemplo práctico de aplicación real]\n\nRecuerda la regla de oro: Mucha información técnica en el menor espacio posible.`;
+    const prompt = `Tema: "${topic}"\n\nGenera tu respuesta ESTRICTAMENTE siguiendo este formato fijo (no añadas NADA más):\n\n1. [Concepto clave 1]\n   [Explicación breve y técnica que aporte valor]\n   [Ejemplo práctico de aplicación real]\n\n2. [Concepto clave 2]\n   [Explicación breve y técnica que aporte valor]\n   [Ejemplo práctico de aplicación real]\n\n3. [Concepto clave 3]\n   [Explicación breve y técnica que aporte valor]\n   [Ejemplo práctico de aplicación real]`;
 
     let result;
     let retries = 3;
